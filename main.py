@@ -287,7 +287,7 @@ def argument():
 	p.add_argument('--sample_size', '-sS',  default=64,        type=int)
 	p.add_argument('--pool_size',   '-pS',  default=128*5,      type=int)
 	p.add_argument('--epoch_size',  '-eS',  default=1000,       type=int)
-	p.add_argument('--nn_model',    '-nn',  default='H')
+	p.add_argument('--nn_model',    '-nn',  default='I')
 	p.add_argument('--activate',    '-af',  default='tanh')
 	p.add_argument('--pooling_method',    '-pM',  default='max')
 
