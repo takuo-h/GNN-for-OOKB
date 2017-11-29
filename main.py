@@ -4,7 +4,7 @@ import os
 os.environ['CHAINER_TYPE_CHECK'] = '0'
 
 import chainer
-import cupy as cp
+#import cupy as cp # in default, cupy (gpu) is tuned off. please remove # to use gpu
 import numpy as np
 from chainer import serializers
 import util.general_tool as tool
