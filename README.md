@@ -5,7 +5,7 @@ download or clone this repository
 unzip each dataset in dataset dir   
 python main.py  
 
-#Requirements
+#Requirements  
 chainer  
 cuda or numpy  
 more_itertools  
