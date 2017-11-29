@@ -15,7 +15,7 @@
  use option -nn to use your models, e.g., "python -nn X" runs the model X  
 
 #How to analyse and investigate results   
- apply draw-score-history/draw.py to your results(scores) with given thresholds.      
+ apply draw-score-history/draw.py to your results(scores) with given thresholds e.g., used margins in score functions.      
  this script shows an image (following image is an example), that is how the scores are changed in the learning.   
  in particular, red and blue lines indicate negative and positive triplet's scores, respectively. the black line is your threshold, and the green line is accuracy using the threshold, i.e., how well the threshold splits triplets. this drawing is not the contribution of my paper, but i think it may help us to investigate model's behavior.  
 
