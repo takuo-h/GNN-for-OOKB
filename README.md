@@ -4,14 +4,14 @@
 #How to use  
  download or clone this repository  
  unzip each dataset in dataset dir   
- python main.py  
+ then type "python main.py"  
 
 #Requirements  
  chainer, cuda or numpy, more_itertools  
 
 #How to modify this model or develop your models  
  add your models in models dir  
- register your models in models/manager.py       
+ register your models in models/manager.py     
  use option -nn to use your models, e.g., "python -nn X" runs the model X  
 
 #How to analyse and investigate results   
