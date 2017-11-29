@@ -18,7 +18,7 @@ use option -nn to use your models, e.g., "python -nn X" runs the model X
 #How to undarstand results   
 run draw-score-history/draw.py with your threshold    
 this script shows learning history of positive and negative triplets's scores  
-(checking examples is easiest way to understand this)  
+(checking examples in draw-score-history dir is the easiest way to understand this)  
   
 #How to cite this work  
 officia paper: https://www.ijcai.org/proceedings/2017/0250.pdf  
