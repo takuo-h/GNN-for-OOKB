@@ -1,5 +1,6 @@
 import numpy
-from chainer import Variable, cuda
+from chainer import Variable
+#from chainer import cuda # in default, cupy (gpu) is tuned off. please remove the first # to use gpu
 
 class Backend:
 	def __init__(self,args):
