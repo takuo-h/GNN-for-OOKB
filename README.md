@@ -18,8 +18,10 @@
  run draw-score-history/draw.py with your threshold    
  this script shows learning history of positive and negative triplets's scores
  ( next image is an example of it )  
-![tmp](https://user-images.githubusercontent.com/17702908/33366678-4acd11de-d52f-11e7-842c-08bd52ebfce7.png)
   
+<img src="https://user-images.githubusercontent.com/17702908/33366678-4acd11de-d52f-11e7-842c-08bd52ebfce7.png" width="600px">
+
+
 #How to cite this work  
 official paper: https://www.ijcai.org/proceedings/2017/0250.pdf  
 official bibtex : https://www.ijcai.org/proceedings/2017/bibtex/250 (directly download the bibtex file)
