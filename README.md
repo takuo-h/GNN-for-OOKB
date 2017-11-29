@@ -22,4 +22,4 @@ this script show learning history of positive and negative triplets's scores
   
 #How to cite this work  
 officia paper: https://www.ijcai.org/proceedings/2017/0250.pdf  
-official bibtex : https://www.ijcai.org/proceedings/2017/bibtex/250  
+official bibtex : https://www.ijcai.org/proceedings/2017/bibtex/250 (directly download the bibtex file)
