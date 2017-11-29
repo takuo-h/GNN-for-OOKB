@@ -17,7 +17,7 @@
 #How to analyse and investigate results   
  apply draw-score-history/draw.py to your results(scores) with thresholds including used margins in score functions.      
  this script shows an image (following image is an example), that is how the scores are changed in the learning.   
- in particular, red and blue lines indicate negative and positive triplet's scores, respectively. the black line is your threshold, and the green line is accuracy using the threshold, i.e., how well the threshold splits triplets. this drawing is not the contribution of my paper, but i think it may help us to investigate model's behavior.  
+ in particular, red and blue lines indicate negative and positive triplet's scores, respectively. the black line is your threshold, and the green line is accuracy using the threshold, i.e., how well the threshold splits triplets. this drawing is not the contribution of my paper, but i think it may help us to understand model's behavior.  
 
 <img src="https://user-images.githubusercontent.com/17702908/33366678-4acd11de-d52f-11e7-842c-08bd52ebfce7.png" width="600px">
 
