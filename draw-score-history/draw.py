@@ -32,8 +32,8 @@ def draw(source_file,target_file,mode,ymin=0,ymax=100000,is_logscale=False,sampl
 		if mode not in text: continue
 		xmax+=1
 		if xmax!=1: continue
-		for terms in text[len(mode)+1:].split(' '):
-			h,r,t,l = map(int,terms.split(',')[:-1])
+		for items in text[len(mode)+1:].split(' '):
+			h,r,t,l = map(int,items.split(',')[:-1])
 			tuples[l][r].add((h,r,t))
 			relation_set.add(r)
 	Rsize = len(relation_set)
@@ -49,10 +49,10 @@ def draw(source_file,target_file,mode,ymin=0,ymax=100000,is_logscale=False,sampl
 	count=0
 	for text in open(source_file):
 		if mode not in text: continue
-		for terms in text[len(mode)+1:].split(' '):
-			terms = terms.split(',')
-			t = tuple(map(int,terms[:-2]))
-			v = float(terms[-1])
+		for items in text[len(mode)+1:].split(' '):
+			items = items.split(',')
+			t = tuple(map(int,items[:-2]))
+			v = float(items[-1])
 			if is_logscale: v = math.copysign(math.log(v),v)
 			values[t][count] = v
 		count+=1
