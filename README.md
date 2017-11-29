@@ -21,5 +21,5 @@ this script shows learning history of positive and negative triplets's scores
 (checking examples in draw-score-history dir is the easiest way to understand this)  
   
 #How to cite this work  
-officia paper: https://www.ijcai.org/proceedings/2017/0250.pdf  
+official paper: https://www.ijcai.org/proceedings/2017/0250.pdf  
 official bibtex : https://www.ijcai.org/proceedings/2017/bibtex/250 (directly download the bibtex file)
