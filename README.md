@@ -14,7 +14,7 @@
  register your models in models/manager.py       
  use option -nn to use your models, e.g., "python -nn X" runs the model X  
 
-#How to undarstand results   
+#How to analyse and investigate results   
  run draw-score-history/draw.py with your threshold    
  this script shows learning history of positive and negative triplets's scores
  ( next image is an example of it )  
