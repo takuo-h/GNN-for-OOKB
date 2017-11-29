@@ -2,20 +2,20 @@
 
 
 #How to use  
- download or clone this repository  
- unzip each dataset in dataset dir   
+ download or clone this repository.  
+ unzip each dataset in dataset dir.   
  then type "python main.py"  
 
 #Requirements  
  chainer, cuda or numpy, more_itertools  
 
 #How to modify this model or develop your models  
- add your models in models dir  
- register your models in models/manager.py     
+ add your models in models dir.  
+ register your models in models/manager.py      
  use option -nn to use your models, e.g., "python -nn X" runs the model X  
 
 #How to analyse and investigate results   
- apply draw-score-history/draw.py to your results(scores) with your threshold    
+ apply draw-score-history/draw.py to your results(scores) with your threshold.    
  this script shows an image (following image is an example), that is how the scores are changed in the learning.  
  in particular, red and blue lines indicate negative and positive triplet's scores, respectively.  
  the black line is your threshold, and the green line is accuracy using the threshold, i.e., how well the threshold splits triplets.
