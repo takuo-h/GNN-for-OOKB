@@ -4,6 +4,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 matplotlib.use('TkAgg')
 from matplotlib.ticker import *
+import matplotlib.patches as patches
 
 import random,os,sys,math
 from collections import defaultdict
@@ -14,7 +15,12 @@ import datetime
 def trace(*args):
 	print(datetime.datetime.now().strftime('%H:%M:%S')+' '+' '.join(map(str,args)))
 
-def draw(source_file,target_file,mode,ymin=0,ymax=100000,is_logscale=False,sample_size=50,threshold=300,best_accuracy=90.0):
+
+"""
+patches.Rectangle((x, y), 0.5, 0.5,
+	alpha=0.1,facecolor='red',label='Label')
+"""
+def draw(source_file,target_file,mode,ymin=0,ymax=100000,is_logscale=False,sample_size=50,threshold=300,ref_accuracy=90.0):
 	assert os.path.exists(source_file), ('cannot such file',source_file)
 
 	plt.figure(figsize=(7,3))
@@ -58,7 +64,7 @@ def draw(source_file,target_file,mode,ymin=0,ymax=100000,is_logscale=False,sampl
 		trace('\t\t relation:',r)
 		# draw scores
 		ax1 = plt.subplot(1+Rsize//Wsize,Wsize,r+1)
-		ax1.set_title(relationsWN11[r],fontsize=3)
+		ax1.set_title(relationsWN11[r],fontsize=5,y=-0.05)
 		for _ in range(2*sample_size):
 			l = random.randint(0,1)
 			if len(tuples[l][r])==0: continue
@@ -97,11 +103,9 @@ def draw(source_file,target_file,mode,ymin=0,ymax=100000,is_logscale=False,sampl
 		ax2.spines["top"].set_color("none")
 
 
-
-
 	trace('\t\t total')
 	ax1 = plt.subplot(1+Rsize//Wsize,Wsize,r+2)
-	ax1.set_title('total',fontsize=3)
+	ax1.set_title('total',fontsize=5,y=-0.05)
 
 	ax2 = ax1.twinx()
 	ax2.set_ylim([0,100.0])
@@ -129,10 +133,33 @@ def draw(source_file,target_file,mode,ymin=0,ymax=100000,is_logscale=False,sampl
 					if values[t][i]> threshold and l==0:
 						accuracy[i]+=1
 		N += len(tuples[0][r])+len(tuples[1][r])
-	ax2.plot([100.0*x/N for x in accuracy],         'g-',alpha=0.8,linewidth=0.5)
-	
+	accuracy = [100.0*x/N for x in accuracy]
+	ax2.plot(accuracy,color='#333333',alpha=0.8,linewidth=0.5,label='my accuracy')
+
 	# draw best accuracy
-	ax2.plot([best_accuracy for _ in range(xmax)],  'k:',alpha=1.0,linewidth=0.5)
+	ax2.plot([ref_accuracy for _ in range(xmax)], color='#333333',linestyle='dashed',alpha=1.0,linewidth=0.5,label="ref's accuracy")
+
+	# draw best point
+	best_accuracy, best_epoch = 0,0
+	for i,acc in enumerate(accuracy):
+		if acc>best_accuracy:
+			best_accuracy=acc
+			best_epoch = i
+	ax2.plot([best_epoch],[best_accuracy],color='red',marker='o',markersize=0.5)
+	ax2.annotate(str(best_accuracy)[:5], xy=(best_epoch,best_accuracy),fontsize=5, xytext=(0,-5),textcoords='offset points')
+
+	# draw legend
+	ax2.legend(loc="lower right", ncol=1, fontsize=3, frameon=False)
+	
+
+	# draw common legend
+	plt.subplots_adjust(left=None, bottom=None, right=None, top=None, wspace=0, hspace=0)
+	rect1 = patches.Rectangle((0,0),0.1,0.1,facecolor='blue',linewidth=0)
+	rect2 = patches.Rectangle((0,0),0.1,0.1,facecolor='red',linewidth=0)
+	rect3 = patches.Rectangle((0,0),0.1,0.1,facecolor='black',linewidth=0)
+	rect4 = patches.Rectangle((0,0),0.1,0.1,facecolor='green',linewidth=0)
+	plt.figlegend((rect1, rect2, rect3, rect4), ('score of positive triplets','score of negative triplet','threshold','accuracy'), \
+				loc="upper center", ncol=4, bbox_to_anchor=(0.5,0.95), fontsize=7, prop={'size': 4}, frameon=False)
 
 	plt.savefig(target_file+'-'+mode+'.png',dpi=720)
 	plt.clf()
