@@ -10,12 +10,11 @@ import matplotlib.lines as mlines
 import random,os,sys,math
 from collections import defaultdict
 
-relationsWN11={0:'type_of',1:'synset_domain_topic',2:'has_instance',3:'member_holonym',4:'part_of',5:'has_part',6:'member_meronym',7:'similar_to',8:'subordinate_instance_of',9:'domain_region',10:'domain_topic'}
-
 import datetime
 def trace(*args):
 	print(datetime.datetime.now().strftime('%H:%M:%S')+' '+' '.join(map(str,args)))
 
+relationsWN11={0:'type_of',1:'synset_domain_topic',2:'has_instance',3:'member_holonym',4:'part_of',5:'has_part',6:'member_meronym',7:'similar_to',8:'subordinate_instance_of',9:'domain_region',10:'domain_topic'}
 
 """
 patches.Rectangle((x, y), 0.5, 0.5,
