@@ -89,18 +89,20 @@ def initilize_dataset():
 
 	# load dev
 	tool.trace('load dev')
-	dev_data = set()
+	dev_data = list()
 	for line in open(args.dev_file):
 		h,r,t,l = list(map(int,line.strip().split('\t')))
-		dev_data.add((h,r,t,l,))
-	dev_data=list(dev_data)
+		if h not in glinks or t not in glinks: continue
+		dev_data.append((h,r,t,l,))
 	print('dev size:',len(dev_data))
 
 	# load test
 	tool.trace('load test')
-	test_data = [line.strip().split('\t') for line in open(args.test_file)]
-	test_data = [tuple(map(int,x)) for x in test_data]
-	test_data = list(set(test_data))
+	test_data = list()
+	for line in open(args.test_file):
+		h,r,t,l = list(map(int,line.strip().split('\t')))
+		if h not in glinks or t not in glinks: continue
+		test_data.append((h,r,t,l,))
 	print('test size:',len(test_data))
 
 
