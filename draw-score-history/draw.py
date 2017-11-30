@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 matplotlib.use('TkAgg')
 from matplotlib.ticker import *
 import matplotlib.patches as patches
+import matplotlib.lines as mlines
 
 import random,os,sys,math
 from collections import defaultdict
@@ -23,7 +24,8 @@ patches.Rectangle((x, y), 0.5, 0.5,
 def draw(source_file,target_file,mode,ymin=0,ymax=100000,is_logscale=False,sample_size=50,threshold=300,ref_accuracy=90.0):
 	assert os.path.exists(source_file), ('cannot such file',source_file)
 
-	plt.figure(figsize=(7,3))
+	plt.figure(figsize=(6,3))
+	plt.subplots_adjust(left=None, bottom=None, right=None, top=None, wspace=0, hspace=0)
 
 	trace('\tcollecting properties')
 	xmax,tuples = 0,[defaultdict(set),defaultdict(set)]
@@ -105,7 +107,7 @@ def draw(source_file,target_file,mode,ymin=0,ymax=100000,is_logscale=False,sampl
 
 	trace('\t\t total')
 	ax1 = plt.subplot(1+Rsize//Wsize,Wsize,r+2)
-	ax1.set_title('total',fontsize=5,y=-0.05)
+	ax1.set_title('total',fontsize=5.5,y=-0.05)
 
 	ax2 = ax1.twinx()
 	ax2.set_ylim([0,100.0])
@@ -121,7 +123,7 @@ def draw(source_file,target_file,mode,ymin=0,ymax=100000,is_logscale=False,sampl
 	ax1.spines["top"].set_color("none")
 	ax2.spines["top"].set_color("none")
 
-	# draw accuracy
+	# get accuracy
 	accuracy = [0.0 for i in range(xmax)]
 	N = 0.0
 	for r in range(Rsize):
@@ -134,6 +136,7 @@ def draw(source_file,target_file,mode,ymin=0,ymax=100000,is_logscale=False,sampl
 						accuracy[i]+=1
 		N += len(tuples[0][r])+len(tuples[1][r])
 	accuracy = [100.0*x/N for x in accuracy]
+	# draw accuracy
 	ax2.plot(accuracy,color='#333333',alpha=0.8,linewidth=0.5,label='my accuracy')
 
 	# draw best accuracy
@@ -145,23 +148,36 @@ def draw(source_file,target_file,mode,ymin=0,ymax=100000,is_logscale=False,sampl
 		if acc>best_accuracy:
 			best_accuracy=acc
 			best_epoch = i
-	ax2.plot([best_epoch],[best_accuracy],color='red',marker='o',markersize=0.5)
-	ax2.annotate(str(best_accuracy)[:5], xy=(best_epoch,best_accuracy),fontsize=5, xytext=(0,-5),textcoords='offset points')
-
-	# draw legend
-	ax2.legend(loc="lower right", ncol=1, fontsize=3, frameon=False)
+	ax2.annotate(str(best_accuracy)[:5], xy=(best_epoch,best_accuracy),fontsize=5, xytext=(-2,-7),textcoords='offset points')
+	ax2.plot([best_epoch],[best_accuracy],color='red',marker='o',markersize=0.6,label='best',linestyle="None")
 	
+	# draw legend
+#	lgnd = ax2.legend(loc="lower right", ncol=1, fontsize=5, frameon=False, bbox_to_anchor=(0.99,0.3), prop={'size': 3})
+	lgnd = ax2.legend(loc="lower right", ncol=1, fontsize=7, frameon=False, prop={'size': 2.7})
+	lgnd.legendHandles[2]._legmarker.set_markersize(0.6)
+
 
 	# draw common legend
-	plt.subplots_adjust(left=None, bottom=None, right=None, top=None, wspace=0, hspace=0)
-	rect1 = patches.Rectangle((0,0),0.1,0.1,facecolor='blue',linewidth=0)
-	rect2 = patches.Rectangle((0,0),0.1,0.1,facecolor='red',linewidth=0)
-	rect3 = patches.Rectangle((0,0),0.1,0.1,facecolor='black',linewidth=0)
-	rect4 = patches.Rectangle((0,0),0.1,0.1,facecolor='green',linewidth=0)
-	plt.figlegend((rect1, rect2, rect3, rect4), ('score of positive triplets','score of negative triplet','threshold','accuracy'), \
-				loc="upper center", ncol=4, bbox_to_anchor=(0.5,0.95), fontsize=7, prop={'size': 4}, frameon=False)
+#	"""
+	colors = ['blue','red','black','green']
+#	labels = ['score of positive triplets','score of negative triplets','threshold','accuracy']
+	labels = ['positive triplet score','negative triplets score','threshold','accuracy']
+	indicators = list()
+	for c,l in zip(colors,labels):
+#		indicators.append(patches.Rectangle((0,0),0.1,0.1,facecolor=c,linewidth=0))
+		indicators.append(mlines.Line2D([], [], color=c,	linewidth=0.5, label=l))
+	plt.figlegend(indicators, labels, \
+#				loc="upper center", ncol=4, bbox_to_anchor=(0.37,0.84), fontsize=7, prop={'size': 3}, frameon=False)
+				loc="upper center", ncol=4, bbox_to_anchor=(0.60,0.84), fontsize=7, prop={'size': 3}, frameon=False)
+#				loc="upper center", ncol=4, bbox_to_anchor=(0.42,0.09), fontsize=7, prop={'size': 3}, frameon=False)
+#				loc="upper center", ncol=4, bbox_to_anchor=(0.27,0.09), fontsize=7, prop={'size': 3}, frameon=False)
+#				loc="upper center", ncol=4, bbox_to_anchor=(0.27,0.84), fontsize=7, prop={'size': 3}, frameon=False)
+#	"""
 
-	plt.savefig(target_file+'-'+mode+'.png',dpi=720)
+	plt.annotate('', xy=(-3, 3.0), xytext=(1.0, 3.0), xycoords='axes fraction' ,\
+				arrowprops=dict(arrowstyle="-", color='k', linewidth=0.3))
+#	plt.figure(figsize=(6,3),tight_layout = {'pad': 0})  
+	plt.savefig(target_file+'-'+mode+'.png',dpi=720, bbox_inches='tight',pad_inches=0.1)
 	plt.clf()
 
 import os
