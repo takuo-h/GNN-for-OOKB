@@ -54,17 +54,17 @@ def draw(source_file,target_file,mode,ymin=0,ymax=100000,is_logscale=False,sampl
 			items = items.split(',')
 			t = tuple(map(int,items[:-2]))
 			v = float(items[-1])
-			if is_logscale: v = math.copysign(math.log(v),v)
 			values[t][count] = v
 		count+=1
 
 	trace('\tdrawing')
 	Wsize=4
-	if is_logscale: threshold = math.log(threshold)
 	for r in range(Rsize):
 		trace('\t\t relation:',r)
 		# draw scores
 		ax1 = plt.subplot(1+Rsize//Wsize,Wsize,r+1)
+		if is_logscale:
+			ax1.set_yscale('log')
 		ax1.set_title(relationsWN11[r],fontsize=5,y=-0.05)
 		for _ in range(2*sample_size):
 			l = random.randint(0,1)
