@@ -280,9 +280,8 @@ class Model(chainer.Chain):
 		if self.is_bound_wr:	xr = F.tanh(xr)
 		neg = F.batch_l2_norm_squared(neg+xr)
 
-		if self.object_kind==1: return sum(F.relu(self.threshold+pos-neg))
-		if self.object_kind==2: return sum(pos+F.relu(self.threshold-neg))
-		if self.object_kind==3: return sum(self.threshold*pos-neg)
+		if self.objective_function=='relative': return sum(F.relu(self.threshold+pos-neg))
+		if self.objective_function=='absolute': return sum(pos+F.relu(self.threshold-neg))
 
 
 	def get_scores(self,candidates,links,relations,edges,xp,mode):

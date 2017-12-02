@@ -206,53 +206,61 @@ def main(args):
 from argparse import ArgumentParser
 def argument():
 	p = ArgumentParser()
+
+	# GPU	
+	p.add_argument('--use_gpu',     '-g',   default=False,  action='store_true')
+	p.add_argument('--gpu_device',  '-gd',  default=0,      type=int)
+
+	# trian, dev, test, and other filds
 	p.add_argument('--train_file',      '-tF',  default='dataset/standard/Freebase13/serialized/train')
 	p.add_argument('--dev_file',        '-vF',  default='dataset/standard/Freebase13/serialized/dev')
 	p.add_argument('--test_file',       '-eF',  default='dataset/standard/Freebase13/serialized/test')
 	p.add_argument('--auxiliary_file',  '-aF',  default='dataset/standard/Freebase13/serialized/train')
+	# dirs
 	p.add_argument('--param_dir',       '-pD',  default='')
 	p.add_argument('--margin_file',     '-mF',  default='')
 
-	p.add_argument('--use_gpu',     '-g',   default=False,  action='store_true')
-	p.add_argument('--gpu_device',  '-gd',  default=0,      type=int)
+	# entity and relation sizes
+	p.add_argument('--rel_size',  '-Rs',       	default=10,    type=int)
+	p.add_argument('--entity_size', '-Es',      default=18,    type=int)
 
-	p.add_argument('--seed',        '-seed',default=0,      type=int)
-
-	p.add_argument('--rel_size',  '-Rs',       default=10,    type=int)
-	p.add_argument('--entity_size', '-Es',       default=18,    type=int)
-
-	p.add_argument('--is_residual',     '-iR',   default=False,  action='store_true')
-	p.add_argument('--is_batchnorm',    '-iBN',  default=False,  action='store_true')
-	p.add_argument('--is_embed',      	'-nE',   default=True,   action='store_false')
-	p.add_argument('--is_known',    	'-nK',   default=True,   action='store_false')
-	p.add_argument('--is_balanced_tr',    '-nBtr',   default=True,   action='store_false')
-	p.add_argument('--is_balanced_dev',   '-iBde',   default=False,   action='store_true')
-	p.add_argument('--is_bernoulli_trick',  '-iBeT',   default=False,   action='store_true')
-
-	p.add_argument('--is_bound_wr',   '-iRB',   default=False,   action='store_true')
-	p.add_argument('--object_kind',   '-oK',    default=1,  type=int)
-
-	p.add_argument('--layerR' ,      '-Lr',      default=1,      type=int)
-
+	# model parameters (neural network)
+	p.add_argument('--nn_model',		'-nn',  default='I')
+	p.add_argument('--activate',		'-af',  default='tanh')
+	p.add_argument('--pooling_method',	'-pM',  default='max')
 	p.add_argument('--dim',         '-D',       default=200,    type=int)
 	p.add_argument('--order',       '-O',       default=1,      type=int)
-	p.add_argument('--threshold',   '-T',       default=1.0,   type=float)
+	p.add_argument('--threshold',   '-T',       default=300.0,  type=float)
+	p.add_argument('--layerR' ,		'-Lr',      default=1,      type=int)
 
+	# objective function
+	p.add_argument('--objective_function',   '-obj',    default='absolute')
+
+	# dropout rates
 	p.add_argument('--dropout_block','-dBR',     default=0.05,  type=float)
 	p.add_argument('--dropout_decay','-dDR',     default=0.0,   type=float)
 	p.add_argument('--dropout_embed','-dER',     default=0.0,   type=float)
 
-	p.add_argument('--train_size',  '-trS',  default=1000,       type=int)
+	# model flags
+	p.add_argument('--is_residual',     '-iR',   default=False,  action='store_true')
+	p.add_argument('--is_batchnorm',    '-iBN',  default=False,  action='store_true')
+	p.add_argument('--is_embed',      	'-nE',   default=True,   action='store_false')
+	p.add_argument('--is_known',    	'-nK',   default=True,   action='store_false')
+	p.add_argument('--is_bound_wr',		'-iRB',   default=False,   action='store_true')
 
-	p.add_argument('--batch_size',  '-bS',  default=64,        type=int)
-	p.add_argument('--test_batch_size',  '-tbS',  default=64,        type=int)
-	p.add_argument('--sample_size', '-sS',  default=64,        type=int)
-	p.add_argument('--pool_size',   '-pS',  default=128*5,      type=int)
-	p.add_argument('--epoch_size',  '-eS',  default=1000,       type=int)
-	p.add_argument('--nn_model',    '-nn',  default='I')
-	p.add_argument('--activate',    '-af',  default='tanh')
-	p.add_argument('--pooling_method',    '-pM',  default='max')
+	# parameters for negative sampling (corruption)
+	p.add_argument('--is_balanced_tr',    '-nBtr',   default=True,   action='store_false')
+	p.add_argument('--is_balanced_dev',   '-iBde',   default=False,   action='store_true')
+	p.add_argument('--is_bernoulli_trick',  '-iBeT',   default=False,   action='store_true')
 
+	# sizes
+	p.add_argument('--train_size',  	'-trS',  default=1000,       type=int)
+	p.add_argument('--batch_size',		'-bS',  default=64,        type=int)
+	p.add_argument('--sample_size',		'-sS',  default=64,        type=int)
+	p.add_argument('--pool_size',		'-pS',  default=128*5,      type=int)
+	p.add_argument('--epoch_size',		'-eS',  default=1000,       type=int)
+
+	# optimization
 	p.add_argument('--opt_model',   "-Op",  default="Adam")
 	p.add_argument('--alpha0',      "-a0",  default=0,      type=float)
 	p.add_argument('--alpha1',      "-a1",  default=0,      type=float)
@@ -260,6 +268,9 @@ def argument():
 	p.add_argument('--alpha3',      "-a3",  default=0,      type=float)
 	p.add_argument('--beta0',       "-b0",  default=0.01,   type=float)
 	p.add_argument('--beta1',       "-b1",  default=0.001,  type=float)
+
+	# seed to control generaing random variables
+	p.add_argument('--seed',        '-seed',default=0,      type=int)
 
 	args = p.parse_args()
 	return args
