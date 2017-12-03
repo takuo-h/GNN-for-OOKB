@@ -154,12 +154,11 @@ def train(args,m,xp,opt):
 	return sum(Loss),N
 
 def dump_current_scores_of_devtest(args,m,xp):
-	if args.margin_file=='': return
 	for mode in ['dev','test']:
 		if mode=='dev': 	current_data = dev_data
 		if mode=='test': 	current_data = test_data
 
-		scores = list()
+		scores, accuracy = list(),list()
 		for batch in  chunked(current_data, args.test_batch_size):
 			with chainer.using_config('train',False), chainer.no_backprop_mode():
 				current_score = m.get_scores(batch,glinks,grelations,gedges,xp,mode)
@@ -168,9 +167,17 @@ def dump_current_scores_of_devtest(args,m,xp):
 				values = map(str,values)
 				values = ','.join(values)
 				scores.append(values)
+				if v < args.threshold:
+					if l==1: accuracy.append(1.0)
+					else: accuracy.append(0.0)
+				else:
+					if l==1: accuracy.append(0.0)
+					else: accuracy.append(1.0)
 			del current_score
-		with open(args.margin_file,'a') as wf:
-			wf.write(mode+':'+' '.join(scores)+'\n')
+		tool.trace('\t ',mode,sum(accuracy)/len(accuracy))
+		if args.margin_file!='':
+			with open(args.margin_file,'a') as wf:
+				wf.write(mode+':'+' '.join(scores)+'\n')
 
 def get_sizes(args):
 	relation,entity=-1,-1
@@ -212,21 +219,21 @@ def argument():
 	p.add_argument('--gpu_device',  '-gd',  default=0,      type=int)
 
 	# trian, dev, test, and other filds
-	p.add_argument('--train_file',      '-tF',  default='dataset/standard/Freebase13/serialized/train')
-	p.add_argument('--dev_file',        '-vF',  default='dataset/standard/Freebase13/serialized/dev')
-	p.add_argument('--test_file',       '-eF',  default='dataset/standard/Freebase13/serialized/test')
-	p.add_argument('--auxiliary_file',  '-aF',  default='dataset/standard/Freebase13/serialized/train')
+	p.add_argument('--train_file',      '-tF',  default='datasets/standard/WordNet11/serialized/train')
+	p.add_argument('--dev_file',        '-vF',  default='datasets/standard/WordNet11/serialized/dev')
+	p.add_argument('--test_file',       '-eF',  default='datasets/standard/WordNet11/serialized/test')
+	p.add_argument('--auxiliary_file',  '-aF',  default='datasets/standard/WordNet11/serialized/train')
 	# dirs
 	p.add_argument('--param_dir',       '-pD',  default='')
 	p.add_argument('--margin_file',     '-mF',  default='')
 
 	# entity and relation sizes
-	p.add_argument('--rel_size',  '-Rs',       	default=10,    type=int)
-	p.add_argument('--entity_size', '-Es',      default=18,    type=int)
+	p.add_argument('--rel_size',  	'-Rs',      default=11,			type=int)
+	p.add_argument('--entity_size', '-Es',      default=38194,		type=int)
 
 	# model parameters (neural network)
-	p.add_argument('--nn_model',		'-nn',  default='I')
-	p.add_argument('--activate',		'-af',  default='tanh')
+	p.add_argument('--nn_model',		'-nn',  default='A0')
+	p.add_argument('--activate',		'-af',  default='relu')
 	p.add_argument('--pooling_method',	'-pM',  default='max')
 	p.add_argument('--dim',         '-D',       default=200,    type=int)
 	p.add_argument('--order',       '-O',       default=1,      type=int)
@@ -237,25 +244,26 @@ def argument():
 	p.add_argument('--objective_function',   '-obj',    default='absolute')
 
 	# dropout rates
-	p.add_argument('--dropout_block','-dBR',     default=0.05,  type=float)
+	p.add_argument('--dropout_block','-dBR',     default=0.0,  type=float)
 	p.add_argument('--dropout_decay','-dDR',     default=0.0,   type=float)
 	p.add_argument('--dropout_embed','-dER',     default=0.0,   type=float)
 
 	# model flags
-	p.add_argument('--is_residual',     '-iR',   default=False,  action='store_true')
-	p.add_argument('--is_batchnorm',    '-iBN',  default=False,  action='store_true')
+	p.add_argument('--is_residual',     '-nR',   default=False,   action='store_true')
+	p.add_argument('--is_batchnorm',    '-nBN',  default=True,   action='store_false')
 	p.add_argument('--is_embed',      	'-nE',   default=True,   action='store_false')
-	p.add_argument('--is_known',    	'-nK',   default=True,   action='store_false')
-	p.add_argument('--is_bound_wr',		'-iRB',   default=False,   action='store_true')
+	p.add_argument('--is_known',    	'-iK',   default=False,   action='store_true')
+	p.add_argument('--is_bound_wr',		'-iRB',  default=True,   action='store_false')
 
 	# parameters for negative sampling (corruption)
-	p.add_argument('--is_balanced_tr',    '-nBtr',   default=True,   action='store_false')
-	p.add_argument('--is_balanced_dev',   '-iBde',   default=False,   action='store_true')
-	p.add_argument('--is_bernoulli_trick',  '-iBeT',   default=False,   action='store_true')
+	p.add_argument('--is_balanced_tr',    '-iBtr',   default=False,   action='store_true')
+	p.add_argument('--is_balanced_dev',   '-nBde',   default=True,   action='store_false')
+	p.add_argument('--is_bernoulli_trick', '-iBeT',  default=True,   action='store_false')
 
 	# sizes
-	p.add_argument('--train_size',  	'-trS',  default=1000,       type=int)
-	p.add_argument('--batch_size',		'-bS',  default=64,        type=int)
+	p.add_argument('--train_size',  	'-trS',  default=100000,       type=int)
+	p.add_argument('--batch_size',		'-bS',  default=5000,        type=int)
+	p.add_argument('--test_batch_size', '-tbS',  default=20000,        type=int)
 	p.add_argument('--sample_size',		'-sS',  default=64,        type=int)
 	p.add_argument('--pool_size',		'-pS',  default=128*5,      type=int)
 	p.add_argument('--epoch_size',		'-eS',  default=1000,       type=int)
@@ -267,7 +275,7 @@ def argument():
 	p.add_argument('--alpha2',      "-a2",  default=0,      type=float)
 	p.add_argument('--alpha3',      "-a3",  default=0,      type=float)
 	p.add_argument('--beta0',       "-b0",  default=0.01,   type=float)
-	p.add_argument('--beta1',       "-b1",  default=0.001,  type=float)
+	p.add_argument('--beta1',       "-b1",  default=0.0001,  type=float)
 
 	# seed to control generaing random variables
 	p.add_argument('--seed',        '-seed',default=0,      type=int)

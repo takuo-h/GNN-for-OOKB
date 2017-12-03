@@ -198,14 +198,14 @@ class Model(chainer.Chain):
 		self.is_embed = args.is_embed
 		self.is_known = args.is_known
 		self.threshold = args.threshold
-		self.object_kind = args.object_kind
+		self.objective_function = args.objective_function
 		self.is_bound_wr = args.is_bound_wr
 		if args.use_gpu: self.to_gpu()
 
 
 	def get_context(self,entities,links,relations,edges,order,xp):
 		if self.depth==order:
-			return self.embedE(xp.array_int(entities))
+			return self.embedE(xp.array(entities,'i'))
 
 		assign = defaultdict(list)
 		neighbor_dict = defaultdict(int)
@@ -267,7 +267,7 @@ class Model(chainer.Chain):
 			rels.append(r)
 			pos.append(edict[h]-edict[t])
 		pos = F.concat(pos,axis=0)
-		xr = self.embedR(xp.array_int(rels))
+		xr = self.embedR(xp.array(rels,'i'))
 		if self.is_bound_wr:	xr = F.tanh(xr)
 		pos = F.batch_l2_norm_squared(pos+xr)
 
@@ -276,7 +276,7 @@ class Model(chainer.Chain):
 			rels.append(r)
 			neg.append(edict[h]-edict[t])
 		neg = F.concat(neg,axis=0)
-		xr = self.embedR(xp.array_int(rels))
+		xr = self.embedR(xp.array(rels,'i'))
 		if self.is_bound_wr:	xr = F.tanh(xr)
 		neg = F.batch_l2_norm_squared(neg+xr)
 
@@ -300,7 +300,7 @@ class Model(chainer.Chain):
 			rels.append(r)
 			diffs.append(edict[h]-edict[t])
 		diffs = F.concat(diffs,axis=0)
-		xr = self.embedR(xp.array_int(rels))
+		xr = self.embedR(xp.array(rels,'i'))
 		if self.is_bound_wr:	xr = F.tanh(xr)
 		scores = F.batch_l2_norm_squared(diffs+xr)
 		return scores

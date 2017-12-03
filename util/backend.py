@@ -17,13 +17,6 @@ class Backend:
 			numpy.random.seed(args.seed)
 			if args.use_gpu: cupy.random.seed(args.seed)
 
-	def array_int(self,xs):
-		return Variable(self.lib.array(xs, dtype=self.lib.int32))
-
-	def array_float(self,xs):
-		return Variable(self.lib.array(xs, dtype=self.lib.float32))
-
-	def get_max(self,x):
-		x = x.data.argmax(1)
-		if self.is_gpu: x = cuda.to_cpu(x)
-		return list(x)
+	def array(self,xs,dtype):
+		if dtype in ['float','f']:	return Variable(self.lib.array(xs, dtype=self.lib.float32))
+		if dtype in ['int','i']:	return Variable(self.lib.array(xs, dtype=self.lib.int32))
