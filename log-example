@@ -1,0 +1,70 @@
+Namespace(activate='relu', alpha0=0, alpha1=0, alpha2=0, alpha3=0, auxiliary_file='datasets/standard/WordNet11/serialized/train', batch_size=5000, beta0=0.01, beta1=0.0001, dev_file='datasets/standard/WordNet11/serialized/dev', dim=200, dropout_block=0.0, dropout_decay=0.0, dropout_embed=0.0, entity_size=38194, epoch_size=1000, gpu_device=0, is_balanced_dev=True, is_balanced_tr=False, is_batchnorm=True, is_bernoulli_trick=True, is_bound_wr=True, is_embed=True, is_known=False, is_residual=False, layerR=1, margin_file='margins', nn_model='A0', objective_function='absolute', opt_model='Adam', order=1, param_dir='', pool_size=640, pooling_method='max', rel_size=11, sample_size=64, seed=0, test_batch_size=20000, test_file='datasets/standard/WordNet11/serialized/test', threshold=300.0, train_file='datasets/standard/WordNet11/serialized/train', train_size=100000, use_gpu=False)
+main.py -nn A0 -mF margins -T 300
+23:41:40 load train
+23:41:42 set axiaulity
+23:41:42 standard setting, use: edges=links
+23:41:42 load dev
+dev size: 4880
+23:41:42 load test
+test size: 19746
+relation size: 11 entity size: 38194
+23:52:51 epoch: 0 tr Loss: 6079.99789 99953
+23:52:53      dev 0.5114754098360655
+23:52:58      test 0.5206624126405348
+00:04:04 epoch: 1 tr Loss: 4955.34834 100000
+00:04:06      dev 0.539139344262295
+00:04:11      test 0.5452749924035247
+00:15:17 epoch: 2 tr Loss: 4662.97722 100088
+00:15:19      dev 0.5756147540983606
+00:15:24      test 0.5897903372835005
+00:26:24 epoch: 3 tr Loss: 3965.21971 99975
+00:26:26      dev 0.6073770491803279
+00:26:32      test 0.6181505114959992
+00:37:31 epoch: 4 tr Loss: 3596.57662 99993
+00:37:33      dev 0.6270491803278688
+00:37:38      test 0.6434214524460651
+00:48:27 epoch: 5 tr Loss: 3263.50755 99984
+00:48:29      dev 0.6467213114754098
+00:48:34      test 0.6679327458725818
+00:59:34 epoch: 6 tr Loss: 3180.13065 100122
+00:59:36      dev 0.6704918032786885
+00:59:42      test 0.6918869644484958
+01:10:41 epoch: 7 tr Loss: 2758.27536 99805
+01:10:43      dev 0.6864754098360656
+01:10:48      test 0.7100172186772005
+01:21:52 epoch: 8 tr Loss: 2568.79965 99984
+01:21:53      dev 0.7049180327868853
+01:21:59      test 0.7271852527094095
+01:32:49 epoch: 9 tr Loss: 2412.40930 99921
+01:32:51      dev 0.7245901639344262
+01:32:56      test 0.7431884938721767
+01:43:52 epoch: 10 tr Loss: 2464.08531 100036
+01:43:54      dev 0.7436475409836065
+01:43:59      test 0.7599007393902563
+01:54:56 epoch: 11 tr Loss: 2138.53147 99923
+01:54:58      dev 0.7536885245901639
+01:55:03      test 0.7709915932340727
+02:05:44 epoch: 12 tr Loss: 2196.76033 100067
+02:05:46      dev 0.7651639344262295
+02:05:51      test 0.7809176542084473
+02:16:44 epoch: 13 tr Loss: 2085.82914 100083
+02:16:46      dev 0.7680327868852459
+02:16:51      test 0.7894257064721969
+02:27:44 epoch: 14 tr Loss: 1844.11896 100007
+02:27:46      dev 0.7795081967213114
+02:27:52      test 0.7955028866605894
+02:38:26 epoch: 15 tr Loss: 1765.13459 99891
+02:38:28      dev 0.7848360655737705
+02:38:33      test 0.8024916438772409
+02:49:25 epoch: 16 tr Loss: 1685.16237 99844
+02:49:27      dev 0.7975409836065573
+02:49:32      test 0.8084168945609237
+02:59:49 epoch: 17 tr Loss: 1628.56316 99985
+02:59:50      dev 0.7989754098360655
+02:59:55      test 0.8103919781221514
+03:10:06 epoch: 18 tr Loss: 1558.40800 99891
+03:10:08      dev 0.8012295081967213
+03:10:13      test 0.8139369998987137
+03:20:24 epoch: 19 tr Loss: 1504.24878 99982
+03:20:26      dev 0.8114754098360656
+03:20:31      test 0.8199635369188697
